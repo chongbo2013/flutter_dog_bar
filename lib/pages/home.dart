@@ -24,39 +24,40 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   void refresh(int index){
     pageIndex=index;
     setState(() {});
+    globalScaffold.currentState.openEndDrawer();
   }
+
+  get _drawer =>Drawer(child: Column(
+    children: <Widget>[
+      DrawerItem(0, '猜猜狗品种',refresh),
+      DrawerItem(1, '养狗宝典',refresh),
+      DrawerItem(2, '关于我们',refresh)
+    ],
+
+  ));
+  GlobalKey<ScaffoldState> globalScaffold=new GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold(key:globalScaffold,
       appBar: AppBar(
         title: Text('狗吧'),
       ),
       body:gotoPage(),
-      drawer: Drawer(child: Column(
-        children: <Widget>[
-          DrawerItem(1, '猜猜狗品种',refresh),
-          DrawerItem(2, '养狗宝典',refresh),
-          DrawerItem(3, '关于我们',refresh)
-        ],
-
-      ),)
+      drawer: _drawer
     );
   }
 
+  final _widgetOptions = [
+    DogBar(),
+    DogCollection(),
+    About(),
+  ];
+
+  @override
+  bool get wantKeepAlive => true;
   Widget gotoPage() {
-    Widget widget;
-    switch(pageIndex){
-      case 1:{
-        widget=DogBar();
-      };break;
-      case 2:{
-        widget=DogCollection();
-      };break;
-      case 3:{
-        widget=About();
-      };break;
-    }
-    return widget;
+
+    return _widgetOptions[pageIndex];
   }
 }
 typedef DrawerCallback = void Function(int index);
@@ -68,7 +69,9 @@ class DrawerItem extends StatelessWidget {
   @required DrawerCallback onDrawerPress;
 
   DrawerItem(this.id, this.name,this.onDrawerPress);
+  void popDrawer(){
 
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
