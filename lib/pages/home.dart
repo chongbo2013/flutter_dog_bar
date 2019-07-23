@@ -20,9 +20,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     super.initState();
 
   }
-
+  var _titleName;
   void refresh(int index){
     pageIndex=index;
+    _titleName=_widgetNameOptions[pageIndex];
     setState(() {});
     globalScaffold.currentState.openEndDrawer();
   }
@@ -40,7 +41,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(key:globalScaffold,
       appBar: AppBar(
-        title: Text('狗吧'),
+        title: Text(_titleName),
       ),
       body:gotoPage(),
       drawer: _drawer
@@ -52,7 +53,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     DogCollection(),
     About(),
   ];
-
+  final _widgetNameOptions = [
+    '猜猜狗品种',
+    '养狗宝典',
+    '关于我们',
+  ];
   @override
   bool get wantKeepAlive => true;
   Widget gotoPage() {
